@@ -2,7 +2,7 @@ ChromeJSConsoleCollector
 ==============
 
 ## Introduction
-JSConsoleCollector for Chrome provide access to JavaScript errors while running tests with a ChromeDriver.
+JSConsoleCollector for Chrome provide access to JavaScript console output while running tests with a ChromeDriver.
 
 ## Usage
 Simple Python code:
