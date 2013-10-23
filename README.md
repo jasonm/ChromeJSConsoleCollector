@@ -4,6 +4,8 @@ ChromeJSConsoleCollector
 ## Introduction
 JSConsoleCollector for Chrome provide access to JavaScript console output while running tests with a ChromeDriver.
 
+This is based heavily off of [ChromeJSErrorCollector](https://github.com/dharrya/ChromeJSErrorCollector) by Andrew Krasichkov.
+
 ## Usage
 Simple Python code:
 
@@ -46,7 +48,3 @@ console.profileEnd
 * Click "Pack extension..."
 * Choose the `extension/` subdirectory in this repo
 * `mv extension.crx extension-js-console-collector.crx`
-
-## Thanks
-
-This is based heavily off of [ChromeJSErrorCollector](https://github.com/dharrya/ChromeJSErrorCollector)
