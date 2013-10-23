@@ -1,15 +1,15 @@
 {
-	"name": "JavaScript Errors Collector",
-	"manifest_version": 2,
-	"version": "0.3",
-	"content_scripts": [
-		{
-			"all_frames": true,
-			"js": [ "content.js" ],
-			"matches": [ "http://*/*", "https://*/*", "file://*/*" ],
-			"run_at": "document_start"
-		}
-	],
-	"description": "Collect JavaScript errors",
-	"web_accessible_resources": [ "error_listener.js" ]
+  "name": "JavaScript Console Collector",
+  "manifest_version": 2,
+  "version": "0.4",
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": [ "content.js" ],
+      "matches": [ "http://*/*", "https://*/*", "file://*/*" ],
+      "run_at": "document_start"
+    }
+  ],
+  "description": "Collect JavaScript console.log",
+  "web_accessible_resources": [ "console_listener.js" ]
 }
