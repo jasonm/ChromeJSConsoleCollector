@@ -11,5 +11,5 @@
     }
   ],
   "description": "Collect JavaScript console.log",
-  "web_accessible_resources": [ "console_listener.js" ]
+  "web_accessible_resources": [ "content.js" ]
 }

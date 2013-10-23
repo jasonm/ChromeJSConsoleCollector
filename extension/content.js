@@ -1,69 +1,55 @@
 var JSConsoleCollector = {
-  getSavedErrors: function() {
-    var savedErrors = [];
-    if (!!localStorage.JSErrors)
-        savedErrors = JSON.parse(localStorage.JSErrors);
+  getSavedLogs: function() {
+    var savedLogs = [];
+    if (!!localStorage.JSLogs) {
+      savedLogs = JSON.parse(localStorage.JSLogs);
+    }
 
-    return savedErrors;
+    return savedLogs;
   },
-  saveErrors: function(errors) {
-    localStorage.JSErrors = JSON.stringify(errors);
+  saveLogs: function(logs) {
+    localStorage.JSLogs = JSON.stringify(logs);
   },
-  push: function (jsErrors) {
-    var list = this.getSavedErrors();
-    list.push(jsErrors);
-    this.saveErrors(list);
+  push: function (log) {
+    var list = this.getSavedLogs();
+    list.push(log);
+    this.saveLogs(list);
   },
   pump: function() {
-    var list = this.getSavedErrors();
+    var list = this.getSavedLogs();
     this.clear();
     return list;
   },
   clear: function() {
-    this.saveErrors([]);
+    this.saveLogs([]);
   },
-  onError: function(errorMessage, sourceName, lineNumber) {
-    if(!errorMessage.message) {
-      return;
-    }
-    if(!!errorMessage.filename) {
-      sourceName = errorMessage.filename;
-    }
-    if(!!errorMessage.lineno) {
-      lineNumber = errorMessage.lineno;
-    }
+  consoleFunctionWithHistory: function(name) {
+    var originalFunction = console[name];
+    var originalFunctionName = "console." + name;
+    var self = this;
 
-    if(!!errorMessage.target.chrome && !sourceName && !lineNumber && errorMessage.message != 'Script error.') {
-      return;
-    }  
-
-    errorMessage = errorMessage.message;
-    if(errorMessage == 'Script error.') {
-      var error = {
-        errorMessage: errorMessage,
-        sourceName: '',
-        lineNumber: 0,
-        pageUrl: document.location.href  
-      }
-    } else {
-      var error = {
-        errorMessage: errorMessage.replace(/^Uncaught /g, ''),
-        sourceName: sourceName,
-        lineNumber: lineNumber,
-        pageUrl: document.location.href  
-      }
-    }
-
-    JSConsoleCollector.push(error);
+    return function() {
+      self.push([originalFunctionName, Array.prototype.slice.apply(arguments)]);
+      originalFunction.apply(this, arguments);
+    };
   },
   initialize: function() {
-    window.addEventListener('error', JSConsoleCollector.onError, false);
-    var s = document.createElement('script');
-    s.src = chrome.extension.getURL('error_listener.js');
-    (document.head||document.documentElement).appendChild(s);
-      s.onload = function() {
-      s.parentNode.removeChild(s);
+    this.clear();
+
+    var loggingFunctionNames = ["log","info","warn","error","assert","dir","clear","profile","profileEnd"];
+    for (var i = 0 ; i < loggingFunctionNames.length ; i++) {
+      console[loggingFunctionNames[i]] = this.consoleFunctionWithHistory(loggingFunctionNames[i]);
     };
+
+    if (chrome && chrome.extension) {
+      // Inject this script into the page
+      var s = document.createElement('script');
+      s.src = chrome.extension.getURL('content.js');
+      (document.head||document.documentElement).appendChild(s);
+      s.onload = function() {
+        s.parentNode.removeChild(s);
+      };
+    }
   }
 };
 
