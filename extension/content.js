@@ -29,7 +29,11 @@ var JSConsoleCollector = {
     var self = this;
 
     return function() {
-      self.push({'consoleFunction': originalFunctionName, 'arguments': Array.prototype.slice.apply(arguments)});
+      self.push({
+        consoleFunction: originalFunctionName,
+        arguments: Array.prototype.slice.apply(arguments),
+        timestamp: performance ? (performance.timing.navigationStart + performance.now()) : Date.now()
+      });
       originalFunction.apply(this, arguments);
     };
   },
