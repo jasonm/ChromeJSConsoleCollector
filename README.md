@@ -24,7 +24,7 @@ driver.quit()
 Will output:
 
 ```
-[[u'console.log', [u'testing 1']], [u'console.log', [u'testing 2']]]
+[{u'consoleFunction': u'console.log', u'arguments': [u'testing 1']}, {u'consoleFunction': u'console.log', u'arguments': [u'testing 2']}]
 ```
 
 The following functions on `console` are wrapped and logged:
