@@ -48,3 +48,5 @@ console.profileEnd
 * Click "Pack extension..."
 * Choose the `extension/` subdirectory in this repo
 * `mv extension.crx extension-js-console-collector.crx`
+
+
